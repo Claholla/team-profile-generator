@@ -11,11 +11,8 @@ const generateMarkdown = require("./dist/generateMarkdown.js");
 // Array for storage of generated team members
 const teamMembers = [];
 
-// Parent class for extended employee role objects
-const employee =
-
 // Initial function to determine Manager attributes
-const manager = () => {
+const addManager = () => {
     return inquirer.prompt([
         {
             type: "input",
@@ -25,7 +22,7 @@ const manager = () => {
         {
             type: "input",
             name: "id",
-            message: "What is the manager's employee ID number?"
+            message: "What is the manager's employee ID number?",
         },
         {
             type: "input",
@@ -34,15 +31,14 @@ const manager = () => {
         },
         {
             type: "input",
-            name: "officenumber",
-            message: "What is the manager's office number?"
+            name: "officeNumber",
+            message: "What is the manager's office number?",
         },
     ]);
-    addTeam();
 };
 
 // function adds an Engineer to the team roster through user input prompts
-const engineer = () => {
+const addEngineer = () => {
     return inquirer.prompt([
         {
             type: "input",
@@ -63,7 +59,7 @@ const engineer = () => {
 };
 
 // function adds an Intern to the team roster through user input prompts
-const intern = () => {
+const addIntern = () => {
     return inquirer.prompt([
         {
             type: "input",
@@ -97,27 +93,27 @@ const addTeam = () => {
            message: "Which type of employee would you like to add to your team?",
            choices: ["Engineer", "Intern", "Stop adding team members"],
         },
-    ]).then(({ choice }) => {
+    ]).then(({choice}) => {
         switch (choice) {
           case "Engineer":
-            engineer();
+            addEngineer();
             break;
           case "Intern":
-            intern();
+            addIntern();
             break;
           default:
-            team();
+            fillTeam();
             break;
         }
     });
 };
 
 // Runs the initial manager inquirer prompt
-manager()
+addManager()
     .then(addTeam)
     .then(teamMembers => {
         return generateHTML(teamMembers);
-    })
+    }) 
     .catch(err => {
         console.log(err);
     });
