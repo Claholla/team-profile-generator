@@ -1,15 +1,26 @@
 // Document Dependencies
+// File System
 const fs = require("fs");
+// npm installs
 const inquirer = require("inquirer");
 const jest = require("jest");
-const employeeReq = require("./lib/Employee.js");
-const engineerReq = require("./lib/Engineer.js");
-const internReq = require("./lib/Intern.js");
-const managerReq = require("./lib/Manager.js");
+// employee class libraries
+const Employee = require("./lib/Employee.js");
+const Engineer = require("./lib/Engineer.js");
+const Intern = require("./lib/Intern.js");
+const Manager = require("./lib/Manager.js");
+// markdown generation to render HTML page
 const generateMarkdown = require("./dist/generateMarkdown.js");
 
 // Array for storage of generated team members
 const teamMembers = [];
+
+// Function to build HTML document through stored teamMembers array data
+const fillTeam = () => {
+    fs.writeFile(path.join(__dirname, "/dist/index.html"), generateMarkdown(teamMembers), function (err) {
+        throw err;
+    });
+};
 
 // Initial function to determine Manager attributes
 const addManager = () => {
@@ -37,6 +48,19 @@ const addManager = () => {
     ]);
 };
 
+// Runs the initial manager inquirer prompt and logs the inquirer data to the teamMembers array
+const start = () => {
+    addManager()
+        .then((answers) => {
+            const managerLog = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+            // adds the manager data to the teamMembers array
+            teamMembers.push(managerLog);
+            console.log("Manager successfully added to team roster!");
+            // runs function to create and log additional team members
+            addTeam();
+        });
+};
+
 // function adds an Engineer to the team roster through user input prompts
 const addEngineer = () => {
     return inquirer.prompt([
@@ -57,6 +81,20 @@ const addEngineer = () => {
         },
     ]);
 };
+
+// Runs the engineer inquirer prompts and logs the created engineer to the teamMembers array 
+const newEngineer = () => {
+    addEngineer()
+        .then((answers) => {
+            const engineerLog = new Engineer(answers.name, answers.id, answers.github);
+            // adds the engineer data to the teamMembers array
+            teamMembers.push(engineerLog);
+            console.log("Engineer successfully added to team roster!");
+            // runs function to create and log additional team members
+            addTeam();
+        });
+};
+
 
 // function adds an Intern to the team roster through user input prompts
 const addIntern = () => {
@@ -79,14 +117,28 @@ const addIntern = () => {
         {
             type: "input",
             name: "school",
-            message: "What is the engineer's name?",
+            message: "What school is the intern attending?",
         },
     ]);
 };
 
+// Runs the intern inquirer prompts and logs the created intern to the teamMembers array 
+const newIntern = () => {
+    addIntern()
+        .then((answers) => {
+            const internLog = new Intern(answers.name, answers.id, answers.email, answers.school);
+            // adds the engineer data to the teamMembers array
+            teamMembers.push(internLog);
+            console.log("Intern successfully added to team roster!");
+            // runs function to create and log additional team members
+            addTeam();
+        });
+};
+
+
 // Adds additional team members after the initial manager profile is created
 const addTeam = () => {
-    return inquirer.prompt([
+    inquirer.prompt([
         {
            type: "list",
            name: "employeeType",
@@ -96,10 +148,10 @@ const addTeam = () => {
     ]).then(({choice}) => {
         switch (choice) {
           case "Engineer":
-            addEngineer();
+            newEngineer();
             break;
           case "Intern":
-            addIntern();
+            newIntern();
             break;
           default:
             fillTeam();
@@ -108,12 +160,4 @@ const addTeam = () => {
     });
 };
 
-// Runs the initial manager inquirer prompt
-addManager()
-    .then(addTeam)
-    .then(teamMembers => {
-        return generateHTML(teamMembers);
-    }) 
-    .catch(err => {
-        console.log(err);
-    });
+start();
