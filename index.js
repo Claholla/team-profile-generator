@@ -10,16 +10,14 @@ const Employee = require("./lib/Employee.js");
 const Engineer = require("./lib/Engineer.js");
 const Intern = require("./lib/Intern.js");
 const Manager = require("./lib/Manager.js");
-// markdown generation to render HTML page
-const generateMarkdown = require("./dist/generateMarkdown.js");
 
 // Array for storage of generated team members
 const teamMembers = [];
 
 // Function to build HTML document through stored teamMembers array data
 const fillTeam = () => {
-    fs.writeFile(path.join(__dirname, "/output/index.html"), generateMarkdown(teamMembers), function (err) {
-        if (err) throw err;
+    fs.writeFile(path.join(__dirname, "/dist/example.html"), generateMarkdown(teamMembers), function (error) {
+        if (error) throw error;
     });
 };
 
@@ -46,20 +44,14 @@ const addManager = () => {
             name: "officeNumber",
             message: "What is the manager's office number?",
         },
-    ]);
-};
-
-// Runs the initial manager inquirer prompt and logs the inquirer data to the teamMembers array
-const start = () => {
-    addManager()
-        .then((answers) => {
-            const managerLog = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+    ]).then((answers) => {
+        const managerLog = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
             // adds the manager data to the teamMembers array
             teamMembers.push(managerLog);
             console.log("Manager successfully added to team roster!");
             // runs function to create and log additional team members
             addTeam();
-        });
+    });
 };
 
 // function adds an Engineer to the team roster through user input prompts
@@ -80,22 +72,15 @@ const addEngineer = () => {
             name: "github",
             message: "What is the engineer's GitHub username?",
         },
-    ]);
+    ]).then((answers) => {
+        const engineerLog = new Engineer(answers.name, answers.id, "test@test.com", answers.github);
+        // adds the engineer data to the teamMembers array
+        teamMembers.push(engineerLog);
+        console.log("Engineer successfully added to team roster!");
+        // runs function to create and log additional team members
+        addTeam();
+    });
 };
-
-// Runs the engineer inquirer prompts and logs the created engineer to the teamMembers array 
-const newEngineer = () => {
-    addEngineer()
-        .then((answers) => {
-            const engineerLog = new Engineer(answers.name, answers.id, answers.github);
-            // adds the engineer data to the teamMembers array
-            teamMembers.push(engineerLog);
-            console.log("Engineer successfully added to team roster!");
-            // runs function to create and log additional team members
-            addTeam();
-        });
-};
-
 
 // function adds an Intern to the team roster through user input prompts
 const addIntern = () => {
@@ -120,22 +105,15 @@ const addIntern = () => {
             name: "school",
             message: "What school is the intern attending?",
         },
-    ]);
+    ]).then((answers) => {
+        const internLog = new Intern(answers.name, answers.id, answers.email, answers.school);
+        // adds the engineer data to the teamMembers array
+        teamMembers.push(internLog);
+        console.log("Intern successfully added to team roster!");
+        // runs function to create and log additional team members
+        addTeam();
+    });
 };
-
-// Runs the intern inquirer prompts and logs the created intern to the teamMembers array 
-const newIntern = () => {
-    addIntern()
-        .then((answers) => {
-            const internLog = new Intern(answers.name, answers.id, answers.email, answers.school);
-            // adds the engineer data to the teamMembers array
-            teamMembers.push(internLog);
-            console.log("Intern successfully added to team roster!");
-            // runs function to create and log additional team members
-            addTeam();
-        });
-};
-
 
 // Adds additional team members after the initial manager profile is created
 const addTeam = () => {
@@ -144,21 +122,111 @@ const addTeam = () => {
            type: "list",
            name: "employeeType",
            message: "Which type of employee would you like to add to your team?",
-           choices: ["Engineer", "Intern", "Stop adding team members"],
+           choices: ["Engineer", "Intern", "Stop adding team members"]
         },
-    ]).then(({choice}) => {
-        switch (choice) {
+    ]).then((answers) => {
+        switch (answers.employeeType) {
           case "Engineer":
-            newEngineer();
+            addEngineer();
             break;
           case "Intern":
-            newIntern();
+            addIntern();
             break;
-          case "Stop adding team members":
+          default:
             fillTeam();
             break;
         }
     });
 };
 
-start();
+const generateMarkdown = (data) => {
+    return `<!DOCTYPE HTML>
+    <html lang="en-us">
+    <head>
+    <meta charset="UTF-8">
+    <meta name= "viewport" content= "width=device-width, initial-scale= 1.0">
+    <title>Team Profile Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3 col">Team Roster</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                ${teamRosterArray(data)}
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    </body>
+    </html>`
+};
+
+/*
+Parses the data contained within teamMembers and allows for direct access
+to individual datum points within the array
+*/
+const teamRosterArray = (data) => {
+    const roster = data.map((datum) => {
+        // Statement uses getRole function to determine case based on returned role value
+        switch (datum.getRole()) {
+            
+            case "Manager":
+                return `
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                <h3>${datum.getName()}
+                <br>    
+                Manager</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${datum.getId()}</li>
+                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
+                <li class="list-group-item">Office Number: ${datum.getOfficeNumber()}</li>
+                </ul>
+            </div>
+            `
+
+            case "Engineer":
+                return `
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                <h3>${datum.getName()}
+                <br>    
+                Engineer</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${datum.getId()}</li>
+                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
+                <li class="list-group-item">Github: <a href="http://www.github.com/${datum.getGithub()}">${datum.getGithub()}</a></li>
+                </ul>
+            </div>
+            `
+
+            case "Intern":
+                return `
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                <h3>${datum.getName()}
+                <br>    
+                Intern</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${datum.getId()}</li>
+                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
+                <li class="list-group-item">School: ${datum.getSchool()}</li>
+                </ul>
+            </div>
+            `
+            default:
+                break;
+        }
+    });
+    return roster.join("\n");  
+};
+
+addManager();
