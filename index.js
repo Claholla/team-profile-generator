@@ -1,6 +1,7 @@
 // Document Dependencies
 // File System
 const fs = require("fs");
+const path = require("path");
 // npm installs
 const inquirer = require("inquirer");
 const jest = require("jest");
@@ -17,8 +18,8 @@ const teamMembers = [];
 
 // Function to build HTML document through stored teamMembers array data
 const fillTeam = () => {
-    fs.writeFile(path.join(__dirname, "/dist/index.html"), generateMarkdown(teamMembers), function (err) {
-        throw err;
+    fs.writeFile(path.join(__dirname, "/output/index.html"), generateMarkdown(teamMembers), function (err) {
+        if (err) throw err;
     });
 };
 
@@ -153,7 +154,7 @@ const addTeam = () => {
           case "Intern":
             newIntern();
             break;
-          default:
+          case "Stop adding team members":
             fillTeam();
             break;
         }

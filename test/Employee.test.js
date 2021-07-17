@@ -12,19 +12,19 @@ describe("Employee", () => {
     it("Should set Employee's name property", () => {
         const employeeName = "Clay";
         const testName = new Employee(employeeName);
-        expect(testName.employeeName).toBe(employeeName);
+        expect(testName.name).toBe(employeeName);
     });
 
     it("Should set Employee's ID number property", () => {
         const employeeId = 2;
-        const testId = new Employee(employeeId);
-        expect(testId.employeeId).toBe(employeeId);
+        const testId = new Employee("Clay", employeeId);
+        expect(testId.id).toEqual(employeeId);
     });
 
     it("Should set Employee's Email property", () => {
         const employeeEmail = "claholla@gmail.com";
-        const testEmail = new Employee(employeeEmail);
-        expect(testEmail.employeeEmail).toBe(employeeEmail);
+        const testEmail = new Employee("Clay", 2, employeeEmail);
+        expect(testEmail.email).toBe(employeeEmail);
     });
 });
 
@@ -36,21 +36,21 @@ describe("Export Functions", () => {
         expect(returnedName.getName()).toBe(name);
     });
 
-    it("Should use getId to return an Employee's Id property", () => {
+    it("Should use getId to return an Employee's id property", () => {
         const id = 22;
-        const returnedId = new Employee(id);
-        expect(returnedId.getId()).toBe(id);
+        const returnedId = new Employee("Johnny", id);
+        expect(returnedId.getId()).toEqual(id);
     });
 
     it("Should use getEmail to return an Employee's Email property", () => {
         const email = "johnny@johnrulez.com";
-        const returnedEmail = new Employee(email);
+        const returnedEmail = new Employee("Johnny", 22, email);
         expect(returnedEmail.getEmail()).toBe(email);
     });
 
     it("Should use getRole to return 'Employee'", () => {
         const role = "Employee";
-        const returnRole = new Employee(role);
-        expect(returnedRole.getRole()).toBe(role);
+        const returnRole = new Employee("Johnny", 22, "johnny@johnruelz.com", role);
+        expect(returnRole.getRole()).toBe(role);
     });
 });

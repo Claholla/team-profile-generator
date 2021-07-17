@@ -1,8 +1,6 @@
 // Document dependencies
-const { it } = require("@jest/globals");
-const { describe } = require("yargs");
-const Employee = require("../lib/Employee.js");
-const Manager = require("../lib/Manager.js");
+const Employee = require("../lib/Employee");
+const Manager = require("../lib/Manager");
 
 describe("Manager", () => {
     it("Should set Manager's officeNumber property", () => {
