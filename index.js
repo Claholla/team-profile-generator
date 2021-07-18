@@ -69,11 +69,16 @@ const addEngineer = () => {
         },
         {
             type: "input",
+            name: "email",
+            message: "What is the engineer's email address?",
+        },
+        {
+            type: "input",
             name: "github",
             message: "What is the engineer's GitHub username?",
         },
     ]).then((answers) => {
-        const engineerLog = new Engineer(answers.name, answers.id, "test@test.com", answers.github);
+        const engineerLog = new Engineer(answers.name, answers.id, answers.email, answers.github);
         // adds the engineer data to the teamMembers array
         teamMembers.push(engineerLog);
         console.log("Engineer successfully added to team roster!");
@@ -149,13 +154,13 @@ const generateMarkdown = (data) => {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     </head>
     <body>
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron text-white bg-success">
             <div class="container">
-                <h1 class="display-3 col">Team Roster</h1>
+                <h1 class="display-3">Team Roster</h1>
             </div>
         </div>
         <div class="container">
-            <div class="row">
+            <div class="row gy-5 justify-content-center">
                 ${teamRosterArray(data)}
             </div>
         </div>
@@ -177,51 +182,53 @@ const teamRosterArray = (data) => {
             
             case "Manager":
                 return `
-            <div class="card" style="width: 18rem;">
-                <div class="card-header">
-                <h3>${datum.getName()}
-                <br>    
-                Manager</h3>
-                </div>
-                <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${datum.getId()}</li>
-                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
-                <li class="list-group-item">Office Number: ${datum.getOfficeNumber()}</li>
-                </ul>
-            </div>
-            `
+                <div class="col-4 py-4">    
+                    <div class="card text-white bg-dark">
+                        <div class="card-header">${datum.getRole()}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">${datum.getName()}</h5>
+                                <ul class="card-text">
+                                    <li>ID: ${datum.getId()}</li>    
+                                    <li>Email: <a href="mailto:${datum.getEmail()}">${datum.getEmail()}</a></li>
+                                    <li>Office Number: ${datum.getOfficeNumber()}</li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>`
+                
 
             case "Engineer":
                 return `
-            <div class="card" style="width: 18rem;">
-                <div class="card-header">
-                <h3>${datum.getName()}
-                <br>    
-                Engineer</h3>
-                </div>
-                <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${datum.getId()}</li>
-                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
-                <li class="list-group-item">Github: <a href="http://www.github.com/${datum.getGithub()}">${datum.getGithub()}</a></li>
-                </ul>
-            </div>
-            `
+                <div class="col-4 py-4">    
+                    <div class="card text-white bg-dark">
+                        <div class="card-header">${datum.getRole()}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">${datum.getName()}</h5>
+                                <ul class="card-text">
+                                    <li>ID: ${datum.getId()}</li>    
+                                    <li>Email: <a href="mailto:${datum.getEmail()}">${datum.getEmail()}</a></li>
+                                    <li>Github: <a href="http://www.github.com/${datum.getGithub()}">${datum.getGithub()}</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>`
 
             case "Intern":
                 return `
-            <div class="card" style="width: 18rem;">
-                <div class="card-header">
-                <h3>${datum.getName()}
-                <br>    
-                Intern</h3>
-                </div>
-                <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${datum.getId()}</li>
-                <li class="list-group-item">Email: <a href="mailto: ${datum.getEmail()}">${datum.getEmail()}</a></li>
-                <li class="list-group-item">School: ${datum.getSchool()}</li>
-                </ul>
-            </div>
-            `
+                <div class="col-4 py-4">    
+                    <div class="card text-white bg-dark">
+                        <div class="card-header">${datum.getRole()}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">${datum.getName()}</h5>
+                                <ul class="card-text">
+                                    <li>ID: ${datum.getId()}</li>    
+                                    <li>Email: <a href="mailto:${datum.getEmail()}">${datum.getEmail()}</a></li>
+                                    <li>School: ${datum.getSchool()}</li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>`
+
             default:
                 break;
         }
