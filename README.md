@@ -18,7 +18,6 @@
 
   - [Installation](#installation)
   - [Usage](#usage)
-  - [Contributing](#contributing)
   - [Tests](#tests)
   - [License](#license)
   - [Questions](#questions)
@@ -30,10 +29,6 @@
   ## Usage
 
   Run the application with "node index" and follow the CLI input prompts to populate your team webpage. When you are finished populating your team, select the option to finish and the application will dynamically generate your webpage.
-
-  ## Contributing
-
-  N/A
 
   ## Tests
 
