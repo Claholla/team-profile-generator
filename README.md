@@ -7,6 +7,13 @@
 
   The appication allows the user to input a series of team members and build a roster through the command line input using inquirer prompts to fill information fields about each individual teammate. When the user completes the population of their team, the application generates a webpage displaying the user loaded roster with links to email each member of the team. When applicable, the application also generates links to the team members' GitHub user pages.
 
+  ## Functionality Example
+  https://drive.google.com/file/d/1Kd_t6M54E9dTHONywh1d5I_98rPq6VIS/view
+  
+  ![Team-Profile-Generator](https://user-images.githubusercontent.com/80665978/126053349-5d0cf069-0279-4cfb-afa2-8a9b9b783962.png)
+  <img width="1214" alt="Team-Profile-Generator-CLI" src="https://user-images.githubusercontent.com/80665978/126053367-42b7b5a5-b8d7-4183-8cc3-74982410a14b.png">
+
+
   ## Table of Contents
 
   - [Installation](#installation)
